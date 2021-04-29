@@ -1,0 +1,40 @@
+/* .App {
+  padding: 30px;
+  display: flex;
+} */
+
+.App {
+  background-color: green;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: initial;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App > div {
+  margin-right: 50px;
+}
+
+.App button {
+  margin: 5px;
+  border-radius: 50pt;
+}
+
+.active-filter {
+  background-color: red;
+}
+
+.isdone {
+  opacity: 0.5;
+}
+
+.Error {
+  border: 2px solid red
+}
+
+.Error-message {
+  color: red;
+}
