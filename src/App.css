@@ -38,3 +38,7 @@
 .Error-message {
   color: red;
 }
+
+.del-button {
+  display: flex;
+}

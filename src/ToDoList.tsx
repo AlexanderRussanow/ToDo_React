@@ -3,13 +3,15 @@ import { ChangeFilterTypes, TaskType } from "./App";
 import "./App.css";
 
 type ToDoListPropsType = {
+  id: string
   title: string;
   filter: ChangeFilterTypes;
   task: TaskType[];
-  delTask: (id: string) => void;
-  changeTypeFilters: (newValue: ChangeFilterTypes) => void;
-  addTask: (title: string) => void;
-  doneToggle: (id: string, isDone: boolean) => void;
+  delTask: (id: string, toDoId: string) => void;
+  changeTypeFilters: (newValue: ChangeFilterTypes, toDoId: string) => void;
+  addTask: (title: string, toDoId: string) => void;
+  doneToggle: (id: string, isDone: boolean, toDoId: string) => void;
+  delToDoList: (id: string) => void
 };
 
 const ToDoList = (props: ToDoListPropsType) => {
@@ -17,18 +19,18 @@ const ToDoList = (props: ToDoListPropsType) => {
   const [error, setError] = React.useState<string | null>(null);
 
   const all = () => {
-    props.changeTypeFilters("all");
+    props.changeTypeFilters("all", props.id);
   };
   const active = () => {
-    props.changeTypeFilters("active");
+    props.changeTypeFilters("active", props.id);
   };
   const complieted = () => {
-    props.changeTypeFilters("complieted");
+    props.changeTypeFilters("complieted", props.id);
   };
   const taskAdd = () => {
     const trimTitle = title.trim();
     if (trimTitle) {
-      props.addTask(trimTitle);
+      props.addTask(trimTitle, props.id);
     } else {
       setError("Fiels is required!");
     }
@@ -40,9 +42,9 @@ const ToDoList = (props: ToDoListPropsType) => {
   }
 
   const tasks = props.task.map((t) => {
-    const delTask = () => props.delTask(t.id);
+    const delTask = () => props.delTask(t.id, props.id);
     const changeToggle = (e: ChangeEvent<HTMLInputElement>) => {
-      props.doneToggle(t.id, e.currentTarget.checked);
+      props.doneToggle(t.id, e.currentTarget.checked, props.id);
     };
     return (
       <li key={t.id} className={t.isDone ? "isdone" : ""}>
@@ -55,7 +57,7 @@ const ToDoList = (props: ToDoListPropsType) => {
 
   return (
     <div>
-      <h3>{props.title}</h3>
+      <h3>{props.title}<button onClick={() => props.delToDoList(props.id)}>del list</button></h3>
       <div>
         <input
           className={error ? "Error" : ""}
@@ -66,7 +68,7 @@ const ToDoList = (props: ToDoListPropsType) => {
           }}
         />
         <button onClick={taskAdd}>+</button>
-        {error && <div>{error}</div> }
+        {error && <div className='Error-message'>{error}</div> }
       </div>
       <ul>{tasks}</ul>
       <div>
@@ -89,6 +91,7 @@ const ToDoList = (props: ToDoListPropsType) => {
           Completed
         </button>
       </div>
+      
     </div>
   );
 };
