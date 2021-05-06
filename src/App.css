@@ -32,7 +32,8 @@
 }
 
 .Error {
-  border: 2px solid red
+  border: 2px solid red;
+  outline: none;
 }
 
 .Error-message {
@@ -40,5 +41,5 @@
 }
 
 .del-button {
-  display: flex;
+  display: fle;
 }

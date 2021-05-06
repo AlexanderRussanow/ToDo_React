@@ -1,5 +1,6 @@
 import React from "react";
 import { v1 } from "uuid";
+import AddItemForm from "./AddItemForm";
 import "./App.css";
 import ToDoList from "./ToDoList";
 
@@ -88,8 +89,20 @@ function App() {
 
   }
 
+  const addToDoList = (title: string) => {
+    const newToDoId = v1()
+    const newToDoList: ToDoListType = {
+      id: newToDoId,
+      title: title,
+      filter: 'all'
+    }
+    setToDoList([newToDoList, ...toDoList])
+    setTasks({...task, [newToDoId]: []})
+  }
+
   return (
     <div className="App">
+      <AddItemForm addItem={addToDoList} />
       {toDoList.map((t) => {
         let toDoListFilter = task[t.id]
         if (t.filter === 'active') {

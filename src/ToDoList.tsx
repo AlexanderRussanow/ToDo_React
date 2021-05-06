@@ -1,9 +1,10 @@
 import React, { ChangeEvent } from "react";
+import AddItemForm from "./AddItemForm";
 import { ChangeFilterTypes, TaskType } from "./App";
 import "./App.css";
 
 type ToDoListPropsType = {
-  id: string
+  id: string;
   title: string;
   filter: ChangeFilterTypes;
   task: TaskType[];
@@ -11,35 +12,14 @@ type ToDoListPropsType = {
   changeTypeFilters: (newValue: ChangeFilterTypes, toDoId: string) => void;
   addTask: (title: string, toDoId: string) => void;
   doneToggle: (id: string, isDone: boolean, toDoId: string) => void;
-  delToDoList: (id: string) => void
+  delToDoList: (id: string) => void;
 };
 
 const ToDoList = (props: ToDoListPropsType) => {
-  const [title, setTitle] = React.useState("");
-  const [error, setError] = React.useState<string | null>(null);
-
-  const all = () => {
-    props.changeTypeFilters("all", props.id);
-  };
-  const active = () => {
-    props.changeTypeFilters("active", props.id);
-  };
-  const complieted = () => {
-    props.changeTypeFilters("complieted", props.id);
-  };
-  const taskAdd = () => {
-    const trimTitle = title.trim();
-    if (trimTitle) {
-      props.addTask(trimTitle, props.id);
-    } else {
-      setError("Fiels is required!");
-    }
-    setTitle("");
-  };
-  const changeToggle = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.currentTarget.value)
-    setError(null)
-  }
+  const AddTaskItems = (title: string) => props.addTask(title, props.id);
+  const all = () => props.changeTypeFilters("all", props.id);
+  const active = () => props.changeTypeFilters("active", props.id);
+  const complieted = () => props.changeTypeFilters("complieted", props.id);
 
   const tasks = props.task.map((t) => {
     const delTask = () => props.delTask(t.id, props.id);
@@ -55,20 +35,16 @@ const ToDoList = (props: ToDoListPropsType) => {
     );
   });
 
+  const delTodoList = () => props.delToDoList(props.id);
+
   return (
     <div>
-      <h3>{props.title}<button onClick={() => props.delToDoList(props.id)}>del list</button></h3>
+      <h3>
+        {props.title}
+        <button onClick={delTodoList}>del list</button>
+      </h3>
       <div>
-        <input
-          className={error ? "Error" : ""}
-          value={title}
-          onChange={changeToggle}
-          onKeyPress={(e) => {
-            if (e.key === "Enter") taskAdd();
-          }}
-        />
-        <button onClick={taskAdd}>+</button>
-        {error && <div className='Error-message'>{error}</div> }
+        <AddItemForm addItem={AddTaskItems} />
       </div>
       <ul>{tasks}</ul>
       <div>
@@ -91,7 +67,6 @@ const ToDoList = (props: ToDoListPropsType) => {
           Completed
         </button>
       </div>
-      
     </div>
   );
 };
