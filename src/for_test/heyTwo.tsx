@@ -1,87 +1,84 @@
 import React, { ChangeEvent } from "react";
-import { FilterType, ListType } from "./heyOne";
+import { TaskiType, FilterzType } from "./heyOne";
+import "./../App.css";
+import EditableBle from "./heyThree";
+import ModarateInput from "./heyFour";
 
 type PropsType = {
+  tasks: TaskiType[];
   id: string;
+  editFilter: (mListId: string, filterValue: FilterzType) => void;
   title: string;
-  filter: FilterType;
-  tasks: ListType[];
-  addListItem: (name: string, caseId: string) => void;
-  delListItem: (id: string, caseId: string) => void;
-  ttttt: (id: string, toggle: boolean, caseId: string) => void;
-  filterList: (value: FilterType, caseId: string) => void;
-  delList: (caseId: string) => void
+  delTask: (mListId: string, taskId: string) => void;
+  addTask: (mListId: string, titleName: string) => void;
+  doneToggle: (mListId: string, taskId: string, toggle: boolean) => void;
+  filter: FilterzType;
+  editableTaskName: (
+    mListId: string,
+    taskId: string,
+    newTaskName: string
+  ) => void;
+  editableManeListName: (mListId: string, newSpan: string) => void;
+  delMainList: (mListId: string) => void
 };
 
-const Concorde = (props: PropsType) => {
-  const [input, setInput] = React.useState("");
-  const [error, setError] = React.useState<string | null>(null);
-  const all = () => props.filterList("all", props.id);
-  const done = () => props.filterList("done", props.id);
-  const none = () => props.filterList("none", props.id);
-  const inputButton = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.currentTarget.value);
-    setError("");
-  };
-  const addButton = () => {
-    const trimValue = input.trim();
-    if (trimValue) {
-      props.addListItem(trimValue, props.id);
-    } else {
-      setError("Field is required");
-    }
-    setInput("");
-  };
-  const tasks = props.tasks.map(t => {
-     const delll = () => props.delListItem(t.key, props.id)
-        return (
-           <li>
-              <span>{t.name}</span>
-              <input type="checkbox" checked={t.done} onChange={e => props.ttttt(t.key, e.currentTarget.checked, props.id)}/>
-              <button onClick={delll}>Del</button>
-           </li>
-        )
-     })
+const Seznam = (props: PropsType) => {
+  const forTaskAdding = (titleName: string) => props.addTask(props.id, titleName)
+
+  const task = props.tasks.map((t) => {
+    const delButtonTask = () => props.delTask(props.id, t.id);
+    const spanForEdition = (newSpan: string) =>
+      props.editableTaskName(props.id, t.id, newSpan);
+    return (
+      <li>
+        <EditableBle span={t.titleName} action={spanForEdition} />
+        <input
+          type="checkbox"
+          checked={t.doneOrNote}
+          onChange={(e) =>
+            props.doneToggle(props.id, t.id, e.currentTarget.checked)
+          }
+        />
+        <button onClick={delButtonTask}>X</button>
+      </li>
+    );
+  });
+
+  
+  const editorTitle = (newSpan: string) =>
+    props.editableManeListName(props.id, newSpan);
 
   return (
     <div>
-      <h3>{props.title} <button onClick={() => props.delList(props.id)}>Del</button> </h3>
+      <h3>
+        <EditableBle span={props.title} action={editorTitle} />
+        <button onClick={() => props.delMainList(props.id)}>X</button>
+      </h3>
       <div>
-        <input
-          className={error ? "Error" : ""}
-          value={input}
-          onChange={inputButton}
-          onKeyPress={(e) => {
-            if (e.key === "Enter") addButton()}}
-        />
-        <button onClick={addButton}>+</button>
-        {error ? <div className="Error-message">{error}</div> : null}
+       <ModarateInput action={forTaskAdding}/>
       </div>
-      <ul>
-        {tasks}
-      </ul>
-      <div>
-        <button
-          className={props.filter === "all" ? "active-filter" : ""}
-          onClick={all}
-        >
-          all
-        </button>
-        <button
-          className={props.filter === "done" ? "active-filter" : ""}
-          onClick={done}
-        >
-          done
-        </button>
-        <button
-          className={props.filter === "none" ? "active-filter" : ""}
-          onClick={none}
-        >
-          none
-        </button>
-      </div>
+      <ul>{task}</ul>
+      <button
+        className={props.filter === "all" ? "active-filter" : ""}
+        onClick={() => props.editFilter(props.id, "all")}
+      >
+        all
+      </button>
+      <button
+        className={props.filter === "none" ? "active-filter" : ""}
+        onClick={() => props.editFilter(props.id, "none")}
+      >
+        none
+      </button>
+      <button
+        className={props.filter === "done" ? "active-filter" : ""}
+        onClick={() => props.editFilter(props.id, "done")}
+      >
+        done
+      </button>
+      
     </div>
   );
 };
 
-export default Concorde;
+export default Seznam;

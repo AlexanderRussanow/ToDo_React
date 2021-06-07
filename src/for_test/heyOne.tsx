@@ -1,120 +1,146 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
 import { v1 } from "uuid";
+import Seznam from "./heyTwo";
 import "./../App.css";
-import Concorde from "./heyTwo";
+import ModarateInput from "./heyFour";
 
-export type FilterType = "all" | "done" | "none";
-export type ListType = {
-  key: string;
-  name: string;
-  done: boolean;
-};
-export type ListsType = {
+export type TaskiType = {
   id: string;
+  titleName: string;
+  doneOrNote: boolean;
+};
+
+export type ListsType = {
+  position: string;
   name: string;
-  filter: FilterType;
-};
-export type TodoListType = {
-  [id: string]: ListType[];
+  filter: FilterzType;
 };
 
-const TodoApp = () => {
-  const first = v1();
-  const second = v1();
-  const third = v1();
+export type TaskssType = {
+  [task: string]: TaskiType[];
+};
 
-  const [listy, setListy] = React.useState<ListsType[]>([
-    { id: first, name: "first", filter: "all" },
-    { id: second, name: "second", filter: "all" },
-    { id: third, name: "third", filter: "all" },
+export type FilterzType = "all" | "none" | "done";
+
+const Dapp = () => {
+  const firstOne = v1();
+  const secondOne = v1();
+  const thirdOne = v1();
+
+  const [maineList, setMaineList] = React.useState<ListsType[]>([
+    { position: firstOne, name: "first", filter: "all" },
+    { position: secondOne, name: "first", filter: "all" },
+    { position: thirdOne, name: "first", filter: "all" },
   ]);
 
-  const [list, setList] = React.useState<TodoListType>({
-    [first]: [
-      { key: v1(), name: "hdhshsh", done: false },
-      { key: v1(), name: "11111", done: false },
-      { key: v1(), name: "h22222sh", done: false },
-      { key: v1(), name: "h333333sh", done: true },
-      { key: v1(), name: "hd444444h", done: false },
+  const [taskss, setTaskss] = React.useState<TaskssType>({
+    [firstOne]: [
+      { id: v1(), titleName: "ghfgdhh", doneOrNote: false },
+      { id: v1(), titleName: "ghfgdhh", doneOrNote: false },
+      { id: v1(), titleName: "ghfgdhh", doneOrNote: false },
     ],
-    [second]: [
-      { key: v1(), name: "hdhshsh", done: false },
-      { key: v1(), name: "11111", done: false },
-      { key: v1(), name: "h22222sh", done: false },
-      { key: v1(), name: "h333333sh", done: true },
-      { key: v1(), name: "hd444444h", done: false },
+    [secondOne]: [
+      { id: v1(), titleName: "ghfgdhh", doneOrNote: false },
+      { id: v1(), titleName: "ghfgdhh", doneOrNote: false },
+      { id: v1(), titleName: "ghfgdhh", doneOrNote: false },
     ],
-    [third]: [
-      { key: v1(), name: "hdhshsh", done: false },
-      { key: v1(), name: "11111", done: false },
-      { key: v1(), name: "h22222sh", done: false },
-      { key: v1(), name: "h333333sh", done: true },
-      { key: v1(), name: "hd444444h", done: false },
+    [thirdOne]: [
+      { id: v1(), titleName: "ghfgdhh", doneOrNote: false },
+      { id: v1(), titleName: "ghfgdhh", doneOrNote: false },
+      { id: v1(), titleName: "ghfgdhh", doneOrNote: false },
     ],
   });
 
-  const addListItem = (name: string, caseId: string) => {
-    const updateList = list[caseId];
-    const newList = {
-      key: v1(),
+  const editFilter = (mListId: string, filterValue: FilterzType) => {
+    const findList = maineList.find((ml) => ml.position === mListId);
+    if (findList) {
+      findList.filter = filterValue;
+      setMaineList([...maineList]);
+    }
+  };
+
+  const delTask = (mListId: string, taskId: string) => {
+    const findList = taskss[mListId]
+    taskss[mListId] = findList.filter(t => t.id !== taskId)
+    setTaskss({...taskss})
+  }
+
+  const addTask = (mListId: string, titleName: string) => {
+    const findList = taskss[mListId]
+    const newTask = {
+      id: v1(),
+      titleName: titleName,
+      doneOrNote: false
+    }
+    taskss[mListId] = [newTask, ...findList]
+    setTaskss({...taskss})
+  }
+
+  const doneToggle = (mListId: string, taskId: string, toggle: boolean) => {
+    const findList = taskss[mListId]
+    const findTask = findList.find(t => t.id === taskId) 
+    if (findTask) {
+      findTask.doneOrNote = toggle
+      setTaskss({...taskss})
+    }
+  }
+
+  const editableTaskName = (mListId: string, taskId: string, newTaskName: string) => {
+    const findList = taskss[mListId]
+    const findTask = findList.find(t => t.id === taskId) 
+    if (findTask) {
+      findTask.titleName = newTaskName
+      setTaskss({...taskss})
+    }
+  }
+
+  const editableManeListName = (mListId: string, newSpan: string) => {
+    const findList = maineList.find(l => l.position === mListId)
+    if (findList) {
+      findList.name = newSpan
+      setMaineList([...maineList])
+    }
+  }
+
+  const addNewMainList = (name: string) => {
+    const newId = v1()
+    const newList: ListsType = {
+      position: newId,
       name: name,
-      done: false,
-    };
-    list[caseId] = [newList, ...updateList];
-    setList({ ...list });
-  };
-
-  const delListItem = (id: string, caseId: string) => {
-    const updateList = list[caseId];
-    list[caseId] = updateList.filter((l) => l.key !== id);
-    setList({ ...list });
-  };
-
-  const ttttt = (id: string, toggle: boolean, caseId: string) => {
-    const updateList = list[caseId];
-    const rrrrrr = updateList.find((l) => l.key === id);
-    if (rrrrrr) {
-      rrrrrr.done = toggle;
-      setList({ ...list });
+      filter: 'all'
     }
-  };
+    setMaineList([newList, ...maineList])
+    setTaskss({...taskss, [newId]: []})
+  }
 
-  const filterList = (value: FilterType, caseId: string) => {
-    const updateList = listy.find((l) => l.id === caseId);
-    if (updateList) {
-      updateList.filter = value;
-      setListy([...listy]);
-    }
-  };
-
-  const delList = (caseId: string) => {
-    setListy(listy.filter(f => f.id !== caseId))
-    delete list[caseId]
-
+  const delMainList = (mListId: string) => {
+    setMaineList(maineList.filter(l => l.position !== mListId))
   }
 
   return (
-    <div>
-      {listy.map((l) => {
-         let filteredLists = list[l.id]
-         if (l.filter === 'done') {
-            filteredLists = list[l.id].filter(f => f.done === true)
-         }
-         if (l.filter === 'none') {
-            filteredLists = list[l.id].filter(f => f.done === false)
-         }
+    <div className='App'>
+      <ModarateInput action={addNewMainList}/>
+      {maineList.map((l) => {
+        let filtered = taskss[l.position];
+        if (l.filter === "done") {
+          filtered = taskss[l.position].filter((t) => t.doneOrNote === true);
+        }
+        if (l.filter === "none") {
+          filtered = taskss[l.position].filter((t) => t.doneOrNote === false);
+        }
         return (
-          <Concorde
-            key={l.id}
-            id={l.id}
+          <Seznam
             title={l.name}
+            id={l.position}
+            tasks={filtered}
+            editFilter={editFilter}
+            delTask={delTask}
+            addTask={addTask}
+            doneToggle={doneToggle}
             filter={l.filter}
-            tasks={filteredLists}
-            addListItem={addListItem}
-            delListItem={delListItem}
-            ttttt={ttttt}
-            filterList={filterList}
-            delList={delList}
+            editableTaskName={editableTaskName}
+            editableManeListName={editableManeListName}
+            delMainList={delMainList}
           />
         );
       })}
@@ -122,4 +148,4 @@ const TodoApp = () => {
   );
 };
 
-export default TodoApp;
+export default Dapp;

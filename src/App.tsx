@@ -100,6 +100,24 @@ function App() {
     setTasks({...task, [newToDoId]: []})
   }
 
+  const changeTaskTitle = (id: string, title: string, todoId: string) => {
+    const findThatList = task[todoId]
+    const findTask = findThatList.find(t => t.id === id)
+    if (findTask) {
+      findTask.title = title
+      setTasks({...task})
+    }
+  }
+
+  const changeTodoListTitle = (title: string, todoId: string) => {
+    const findList = toDoList.find(td => td.id === todoId) 
+    if (findList) {
+      findList.title = title
+      setToDoList([...toDoList])
+    }
+    
+  }
+
   return (
     <div className="App">
       <AddItemForm addItem={addToDoList} />
@@ -123,6 +141,8 @@ function App() {
             addTask={addTask}
             doneToggle={doneToggle}
             delToDoList={delToDoList}
+            changeTaskTitle={changeTaskTitle}
+            changeTodoListTitle={changeTodoListTitle}
           />
         );
       })}

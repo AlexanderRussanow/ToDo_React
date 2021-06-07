@@ -2,6 +2,7 @@ import React, { ChangeEvent } from "react";
 import AddItemForm from "./AddItemForm";
 import { ChangeFilterTypes, TaskType } from "./App";
 import "./App.css";
+import EditTableSpan from "./EditTableSpan";
 
 type ToDoListPropsType = {
   id: string;
@@ -13,15 +14,20 @@ type ToDoListPropsType = {
   addTask: (title: string, toDoId: string) => void;
   doneToggle: (id: string, isDone: boolean, toDoId: string) => void;
   delToDoList: (id: string) => void;
+  changeTaskTitle: (id: string, title: string, todoId: string) => void;
+  changeTodoListTitle: (title: string, todoId: string) => void;
 };
 
 const ToDoList = (props: ToDoListPropsType) => {
   const AddTaskItems = (title: string) => props.addTask(title, props.id);
+
   const all = () => props.changeTypeFilters("all", props.id);
   const active = () => props.changeTypeFilters("active", props.id);
   const complieted = () => props.changeTypeFilters("complieted", props.id);
 
   const tasks = props.task.map((t) => {
+    const changeTaskTitle = (title: string) =>
+      props.changeTaskTitle(t.id, title, props.id);
     const delTask = () => props.delTask(t.id, props.id);
     const changeToggle = (e: ChangeEvent<HTMLInputElement>) => {
       props.doneToggle(t.id, e.currentTarget.checked, props.id);
@@ -29,7 +35,7 @@ const ToDoList = (props: ToDoListPropsType) => {
     return (
       <li key={t.id} className={t.isDone ? "isdone" : ""}>
         <input type="checkbox" checked={t.isDone} onChange={changeToggle} />
-        <span>{t.title}</span>
+        <EditTableSpan title={t.title} changeItem={changeTaskTitle} />
         <button onClick={delTask}>X</button>
       </li>
     );
@@ -40,7 +46,7 @@ const ToDoList = (props: ToDoListPropsType) => {
   return (
     <div>
       <h3>
-        {props.title}
+        <EditTableSpan title={props.title} changeItem={(title) => props.changeTodoListTitle(title, props.id)} />
         <button onClick={delTodoList}>del list</button>
       </h3>
       <div>
