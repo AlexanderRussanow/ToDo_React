@@ -27,26 +27,26 @@ function App() {
   const toDoList2 = v1();
 
   const [toDoList, setToDoList] = React.useState<ToDoListType[]>([
-    { id: toDoList1, title: "Whot to do", filter: "all" },
-    { id: toDoList2, title: "Whot to learn", filter: "all" },
+    { id: toDoList1, title: "What to do", filter: "all" },
+    { id: toDoList2, title: "What to learn", filter: "all" },
   ]);
 
   const [task, setTasks] = React.useState<TaskStateType>({
     [toDoList1]: [
-      { id: v1(), title: "Kak pozivaes?", isDone: false },
-      { id: v1(), title: "Kak dela?", isDone: true },
-      { id: v1(), title: "Xhto ty sdelal dlja hip-hopa?", isDone: true },
-      { id: v1(), title: "?????", isDone: true },
-      { id: v1(), title: "Xhto ty, Xhto ty?", isDone: true },
-      { id: v1(), title: "hip-hopa?", isDone: false },
+      { id: v1(), title: "Start up", isDone: false },
+      { id: v1(), title: "Cash in", isDone: true },
+      { id: v1(), title: "Sell out", isDone: true },
+      { id: v1(), title: "Bro down", isDone: true },
+      { id: v1(), title: "????", isDone: true },
+      { id: v1(), title: "!!!!", isDone: false },
     ],
     [toDoList2]: [
-      { id: v1(), title: "?", isDone: false },
-      { id: v1(), title: "sho", isDone: true },
-      { id: v1(), title: "investice v kriptu", isDone: true },
-      { id: v1(), title: "stavki na sport", isDone: true },
-      { id: v1(), title: "bljaaa", isDone: true },
-      { id: v1(), title: "slozno", isDone: false },
+      { id: v1(), title: "JS", isDone: false },
+      { id: v1(), title: "TS", isDone: true },
+      { id: v1(), title: "React JS", isDone: true },
+      { id: v1(), title: "Redux", isDone: true },
+      { id: v1(), title: "Redux Thunk", isDone: true },
+      { id: v1(), title: "Redux Saga", isDone: false },
     ],
   });
 

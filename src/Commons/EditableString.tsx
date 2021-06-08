@@ -32,6 +32,7 @@ const EditTableSpan = (props: EditTableSpanType) => {
 
 export default EditTableSpan;
 
+
 // type PropsType = {
 //   spanText: string;
 //   changeItem: (title: string) => void;
