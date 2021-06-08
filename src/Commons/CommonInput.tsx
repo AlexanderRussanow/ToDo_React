@@ -1,10 +1,10 @@
 import React, { ChangeEvent } from "react";
 
-type AddItemFormType = {
-  addItem: (title: string) => void;
+type CommonInputType = {
+  actionInput: (title: string) => void;
 };
 
-const AddItemForm: React.FC<AddItemFormType> = ({ addItem }) => {
+const CommonInput: React.FC<CommonInputType> = ({ actionInput }) => {
   const [title, setTitle] = React.useState("");
   const [error, setError] = React.useState(false);
 
@@ -12,10 +12,10 @@ const AddItemForm: React.FC<AddItemFormType> = ({ addItem }) => {
     setTitle(e.currentTarget.value);
     setError(false);
   };
-  const itemAdd = () => {
+  const addButton = () => {
     const trimTitle = title.trim();
     if (trimTitle) {
-      addItem(trimTitle);
+      actionInput(trimTitle);
     } else {
       setError(true);
     }
@@ -29,11 +29,11 @@ const AddItemForm: React.FC<AddItemFormType> = ({ addItem }) => {
         value={title}
         onChange={changeTitle}
         onKeyPress={(e) => {
-          if (e.key === "Enter") itemAdd();
+          if (e.key === "Enter") addButton();
         }}
         onBlur={() => setError(false)}
       />
-      <button onClick={itemAdd}>+</button>
+      <button onClick={addButton}>+</button>
       {error && (
         <div className="Error-message">
           <b>Title is required!</b>
@@ -43,7 +43,7 @@ const AddItemForm: React.FC<AddItemFormType> = ({ addItem }) => {
   );
 };
 
-export default AddItemForm;
+export default CommonInput;
 
 
 // type PropsType = {

@@ -2,17 +2,17 @@ import React from "react";
 
 type EditTableSpanType = {
   title: string;
-  changeItem: (title: string) => void;
+  changer: (title: string) => void;
 };
 
-const EditTableSpan = (props: EditTableSpanType) => {
+const EditableString = (props: EditTableSpanType) => {
   const [editMode, setEditMode] = React.useState(false);
   const [editor, setEditor] = React.useState<string>(props.title);
 
   const onEditMode = () => setEditMode(true);
   const offEditMode = () => {
     setEditMode(false);
-    props.changeItem(editor);
+    props.changer(editor);
   };
 
   return editMode ? (
@@ -30,7 +30,7 @@ const EditTableSpan = (props: EditTableSpanType) => {
   );
 };
 
-export default EditTableSpan;
+export default EditableString;
 
 
 // type PropsType = {

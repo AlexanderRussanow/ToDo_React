@@ -1,8 +1,10 @@
 import React from "react";
 import { v1 } from "uuid";
-import AddItemForm from "./AddItemForm";
+import CommonInput from "./Commons/CommonInput";
 import "./App.css";
 import ToDoList from "./ToDoList";
+
+export type ChangeFilterTypes = "all" | "active" | "complieted";
 
 export type TaskType = {
   id: string;
@@ -10,29 +12,27 @@ export type TaskType = {
   isDone: boolean;
 };
 
-export type ChangeFilterTypes = "all" | "active" | "complieted";
-
-type ToDoListType = {
+type ListType = {
   id: string;
   title: string;
   filter: ChangeFilterTypes;
 };
 
-type TaskStateType = {
+type GlobalTaskType = {
   [key: string]: TaskType[];
 };
 
 function App() {
-  const toDoList1 = v1();
-  const toDoList2 = v1();
+  const FIRST = v1();
+  const SECOND = v1();
 
-  const [toDoList, setToDoList] = React.useState<ToDoListType[]>([
-    { id: toDoList1, title: "What to do", filter: "all" },
-    { id: toDoList2, title: "What to learn", filter: "all" },
+  const [toDoList, setToDoList] = React.useState<ListType[]>([
+    { id: FIRST, title: "What to do", filter: "all" },
+    { id: SECOND, title: "What to learn", filter: "all" },
   ]);
 
-  const [task, setTasks] = React.useState<TaskStateType>({
-    [toDoList1]: [
+  const [task, setTasks] = React.useState<GlobalTaskType>({
+    [FIRST]: [
       { id: v1(), title: "Start up", isDone: false },
       { id: v1(), title: "Cash in", isDone: true },
       { id: v1(), title: "Sell out", isDone: true },
@@ -40,7 +40,7 @@ function App() {
       { id: v1(), title: "????", isDone: true },
       { id: v1(), title: "!!!!", isDone: false },
     ],
-    [toDoList2]: [
+    [SECOND]: [
       { id: v1(), title: "JS", isDone: false },
       { id: v1(), title: "TS", isDone: true },
       { id: v1(), title: "React JS", isDone: true },
@@ -55,6 +55,7 @@ function App() {
     task[toDoId] = toDoList.filter((t) => t.id !== id);
     setTasks({ ...task });
   };
+
   const addTask = (title: string, toDoId: string) => {
     const newTask: TaskType = {
       id: v1(),
@@ -86,12 +87,11 @@ function App() {
   const delToDoList = (id: string) => {
     setToDoList(toDoList.filter(t => t.id !== id))
     delete task[id]
-
   }
 
   const addToDoList = (title: string) => {
     const newToDoId = v1()
-    const newToDoList: ToDoListType = {
+    const newToDoList: ListType = {
       id: newToDoId,
       title: title,
       filter: 'all'
@@ -115,12 +115,11 @@ function App() {
       findList.title = title
       setToDoList([...toDoList])
     }
-    
   }
 
   return (
     <div className="App">
-      <AddItemForm addItem={addToDoList} />
+      <CommonInput actionInput={addToDoList} />
       {toDoList.map((t) => {
         let toDoListFilter = task[t.id]
         if (t.filter === 'active') {

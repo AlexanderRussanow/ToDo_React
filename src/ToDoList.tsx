@@ -1,8 +1,9 @@
 import React, { ChangeEvent } from "react";
-import AddItemForm from "./AddItemForm";
+import CommonInput from "./Commons/CommonInput";
 import { ChangeFilterTypes, TaskType } from "./App";
 import "./App.css";
-import EditTableSpan from "./EditTableSpan";
+import EditableString from "./Commons/EditableString";
+
 
 type ToDoListPropsType = {
   id: string;
@@ -19,11 +20,15 @@ type ToDoListPropsType = {
 };
 
 const ToDoList = (props: ToDoListPropsType) => {
-  const AddTaskItems = (title: string) => props.addTask(title, props.id);
+  const addTask = (title: string) => props.addTask(title, props.id);
 
   const all = () => props.changeTypeFilters("all", props.id);
   const active = () => props.changeTypeFilters("active", props.id);
   const complieted = () => props.changeTypeFilters("complieted", props.id);
+
+  const delTodoList = () => props.delToDoList(props.id);
+
+  const changeToDoTitle = (title: string) => props.changeTodoListTitle(title, props.id)
 
   const tasks = props.task.map((t) => {
     const changeTaskTitle = (title: string) =>
@@ -35,22 +40,20 @@ const ToDoList = (props: ToDoListPropsType) => {
     return (
       <li key={t.id} className={t.isDone ? "isdone" : ""}>
         <input type="checkbox" checked={t.isDone} onChange={changeToggle} />
-        <EditTableSpan title={t.title} changeItem={changeTaskTitle} />
+        <EditableString title={t.title} changer={changeTaskTitle} />
         <button onClick={delTask}>X</button>
       </li>
     );
   });
 
-  const delTodoList = () => props.delToDoList(props.id);
-
   return (
     <div>
       <h3>
-        <EditTableSpan title={props.title} changeItem={(title) => props.changeTodoListTitle(title, props.id)} />
+        <EditableString title={props.title} changer={changeToDoTitle} />
         <button onClick={delTodoList}>del list</button>
       </h3>
       <div>
-        <AddItemForm addItem={AddTaskItems} />
+        <CommonInput actionInput={addTask} />
       </div>
       <ul>{tasks}</ul>
       <div>
