@@ -1,4 +1,6 @@
-import React, { ChangeEvent } from "react";
+import { IconButton, TextField } from "@material-ui/core";
+import { AddBox } from "@material-ui/icons";
+import React, { ChangeEvent, KeyboardEvent } from "react";
 
 type CommonInputType = {
   actionInput: (title: string) => void;
@@ -21,10 +23,14 @@ const CommonInput: React.FC<CommonInputType> = ({ actionInput }) => {
     }
     setTitle("");
   };
+  const keyPress = (e: KeyboardEvent) => {
+    if (e.key === "Enter") addButton();
+  };
 
+  const onBlureAction = () => setError(false);
   return (
     <div>
-      <input
+      {/* <input
         className={error ? "Error" : ""}
         value={title}
         onChange={changeTitle}
@@ -32,8 +38,22 @@ const CommonInput: React.FC<CommonInputType> = ({ actionInput }) => {
           if (e.key === "Enter") addButton();
         }}
         onBlur={() => setError(false)}
+      /> */}
+      <TextField
+        variant={"outlined"}
+        className={error ? "Error" : ""}
+        value={title}
+        onChange={changeTitle}
+        onKeyPress={keyPress}
+        onBlur={onBlureAction}
+        helperText={error ? 'Field is required!' : null}
+        error={error}
+        label={'Type here...'}
       />
-      <button onClick={addButton}>+</button>
+      {/* <button onClick={addButton}>+</button> */}
+      <IconButton onClick={addButton} aria-label="delete">
+        <AddBox />
+      </IconButton>
       {error && (
         <div className="Error-message">
           <b>Title is required!</b>
@@ -44,7 +64,6 @@ const CommonInput: React.FC<CommonInputType> = ({ actionInput }) => {
 };
 
 export default CommonInput;
-
 
 // type PropsType = {
 //   addButton: (title: string) => void;

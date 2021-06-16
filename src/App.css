@@ -3,7 +3,7 @@
   display: flex;
 } */
 
-.App {
+/* .App {
   background-color: green;
   min-height: 100vh;
   display: flex;
@@ -16,10 +16,10 @@
 
 .App > div {
   margin-right: 50px;
-}
+} */
 
 .App button {
-  margin: 5px;
+  margin: 1.5px;
   border-radius: 50pt;
 }
 

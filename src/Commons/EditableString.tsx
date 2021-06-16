@@ -1,4 +1,5 @@
-import React from "react";
+import { TextField } from "@material-ui/core";
+import React, { KeyboardEvent } from "react";
 
 type EditTableSpanType = {
   title: string;
@@ -15,15 +16,28 @@ const EditableString = (props: EditTableSpanType) => {
     props.changer(editor);
   };
 
+  const keyPress = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') offEditMode()
+  }
+
   return editMode ? (
-    <input
+    // <input
+    //   value={editor}
+    //   autoFocus
+    //   onBlur={offEditMode}
+    //   onChange={(e) => setEditor(e.currentTarget.value)}
+    //   onKeyPress={(e) => {
+    //     if ((e.key === "Enter")) offEditMode();
+    //   }}
+    // />
+    <TextField
+      variant={"filled"}
       value={editor}
       autoFocus
       onBlur={offEditMode}
       onChange={(e) => setEditor(e.currentTarget.value)}
-      onKeyPress={(e) => {
-        if ((e.key === "Enter")) offEditMode();
-      }}
+      onKeyPress={keyPress}
+      label={'Edit task'}
     />
   ) : (
     <span onDoubleClick={onEditMode}>{props.title}</span>
@@ -31,30 +45,3 @@ const EditableString = (props: EditTableSpanType) => {
 };
 
 export default EditableString;
-
-
-// type PropsType = {
-//   spanText: string;
-//   changeItem: (title: string) => void;
-// };
-
-// const EditName = (props: PropsType) => {
-//   const [edit, setEdit] = React.useState(false);
-//   const [text, setText] = React.useState<string>(props.spanText);
-
-//   const offEdition = () => {
-//     setEdit(false);
-//     props.changeItem(text);
-//   };
-
-//   return edit ? (
-//     <input
-//       value={text}
-//       autoFocus
-//       onChange={(e) => setText(e.currentTarget.value)}
-//       onBlur={offEdition}
-//     />
-//   ) : (
-//     <span onDoubleClick={() => setEdit(true)}>{props.spanText}</span>
-//   );
-// };

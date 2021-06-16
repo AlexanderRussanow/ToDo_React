@@ -3,7 +3,8 @@ import CommonInput from "./Commons/CommonInput";
 import { ChangeFilterTypes, TaskType } from "./App";
 import "./App.css";
 import EditableString from "./Commons/EditableString";
-
+import { Button, Checkbox, IconButton } from "@material-ui/core";
+import { Delete } from "@material-ui/icons";
 
 type ToDoListPropsType = {
   id: string;
@@ -28,7 +29,8 @@ const ToDoList = (props: ToDoListPropsType) => {
 
   const delTodoList = () => props.delToDoList(props.id);
 
-  const changeToDoTitle = (title: string) => props.changeTodoListTitle(title, props.id)
+  const changeToDoTitle = (title: string) =>
+    props.changeTodoListTitle(title, props.id);
 
   const tasks = props.task.map((t) => {
     const changeTaskTitle = (title: string) =>
@@ -39,9 +41,13 @@ const ToDoList = (props: ToDoListPropsType) => {
     };
     return (
       <li key={t.id} className={t.isDone ? "isdone" : ""}>
-        <input type="checkbox" checked={t.isDone} onChange={changeToggle} />
+        <Checkbox  checked={t.isDone} onChange={changeToggle}/>
+        {/* <input type="checkbox" checked={t.isDone} onChange={changeToggle} /> */}
         <EditableString title={t.title} changer={changeTaskTitle} />
-        <button onClick={delTask}>X</button>
+        {/* <button onClick={delTask}>X</button> */}
+        <IconButton onClick={delTask} aria-label="delete">
+          <Delete />
+        </IconButton>
       </li>
     );
   });
@@ -50,31 +56,43 @@ const ToDoList = (props: ToDoListPropsType) => {
     <div>
       <h3>
         <EditableString title={props.title} changer={changeToDoTitle} />
-        <button onClick={delTodoList}>del list</button>
+        {/* <button onClick={}>del list</button> */}
+        <IconButton onClick={delTodoList} aria-label="delete">
+          <Delete />
+        </IconButton>
       </h3>
       <div>
         <CommonInput actionInput={addTask} />
       </div>
-      <ul>{tasks}</ul>
+      <ul style={{listStyle: 'none', paddingLeft: '0'}}>{tasks}</ul>
       <div>
-        <button
-          className={props.filter === "all" ? "active-filter" : ""}
+        <Button
+          color={props.filter === "all" ? "secondary" : "primary"}
+          variant="contained"
+          size="small"
+          // className={props.filter === "all" ? "active-filter" : ""}
           onClick={all}
         >
           All
-        </button>
-        <button
-          className={props.filter === "active" ? "active-filter" : ""}
+        </Button>
+        <Button
+          variant="contained"
+          size="small"
+          color={props.filter === "active" ? "secondary" : "primary"}
+          // className={props.filter === "active" ? "active-filter" : ""}
           onClick={active}
         >
           Active
-        </button>
-        <button
-          className={props.filter === "complieted" ? "active-filter" : ""}
+        </Button>
+        <Button
+          variant="contained"
+          size="small"
+          color={props.filter === "complieted" ? "secondary" : "primary"}
+          // className={props.filter === "complieted" ? "active-filter" : ""}
           onClick={complieted}
         >
           Completed
-        </button>
+        </Button>
       </div>
     </div>
   );

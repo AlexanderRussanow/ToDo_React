@@ -3,6 +3,17 @@ import { v1 } from "uuid";
 import CommonInput from "./Commons/CommonInput";
 import "./App.css";
 import ToDoList from "./ToDoList";
+import {
+  AppBar,
+  Button,
+  Container,
+  Grid,
+  IconButton,
+  Paper,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
+import { Menu } from "@material-ui/icons";
 
 export type ChangeFilterTypes = "all" | "active" | "complieted";
 
@@ -85,66 +96,88 @@ function App() {
   };
 
   const delToDoList = (id: string) => {
-    setToDoList(toDoList.filter(t => t.id !== id))
-    delete task[id]
-  }
+    setToDoList(toDoList.filter((t) => t.id !== id));
+    delete task[id];
+  };
 
   const addToDoList = (title: string) => {
-    const newToDoId = v1()
+    const newToDoId = v1();
     const newToDoList: ListType = {
       id: newToDoId,
       title: title,
-      filter: 'all'
-    }
-    setToDoList([newToDoList, ...toDoList])
-    setTasks({...task, [newToDoId]: []})
-  }
+      filter: "all",
+    };
+    setToDoList([newToDoList, ...toDoList]);
+    setTasks({ ...task, [newToDoId]: [] });
+  };
 
   const changeTaskTitle = (id: string, title: string, todoId: string) => {
-    const findThatList = task[todoId]
-    const findTask = findThatList.find(t => t.id === id)
+    const findThatList = task[todoId];
+    const findTask = findThatList.find((t) => t.id === id);
     if (findTask) {
-      findTask.title = title
-      setTasks({...task})
+      findTask.title = title;
+      setTasks({ ...task });
     }
-  }
+  };
 
   const changeTodoListTitle = (title: string, todoId: string) => {
-    const findList = toDoList.find(td => td.id === todoId) 
+    const findList = toDoList.find((td) => td.id === todoId);
     if (findList) {
-      findList.title = title
-      setToDoList([...toDoList])
+      findList.title = title;
+      setToDoList([...toDoList]);
     }
-  }
+  };
+
+  const toDoMap = toDoList.map((t) => {
+    let toDoListFilter = task[t.id];
+    if (t.filter === "active") {
+      toDoListFilter = task[t.id].filter((t) => t.isDone === false);
+    }
+    if (t.filter === "complieted") {
+      toDoListFilter = task[t.id].filter((t) => t.isDone === true);
+    }
+    return (
+      <Grid item key={t.id}>
+        <Paper elevation={10} style={{padding: '20px'}}>
+        <ToDoList
+          id={t.id}
+          title={t.title}
+          task={toDoListFilter}
+          filter={t.filter}
+          delTask={delTask}
+          changeTypeFilters={changeTypeFilters}
+          addTask={addTask}
+          doneToggle={doneToggle}
+          delToDoList={delToDoList}
+          changeTaskTitle={changeTaskTitle}
+          changeTodoListTitle={changeTodoListTitle}
+        /></Paper>
+      </Grid>
+    );
+  });
 
   return (
     <div className="App">
-      <CommonInput actionInput={addToDoList} />
-      {toDoList.map((t) => {
-        let toDoListFilter = task[t.id]
-        if (t.filter === 'active') {
-          toDoListFilter = task[t.id].filter(t => t.isDone === false)
-        }
-        if (t.filter === 'complieted') {
-          toDoListFilter = task[t.id].filter(t => t.isDone === true)
-        }
-        return (
-          <ToDoList
-            key={t.id}
-            id={t.id}
-            title={t.title}
-            task={toDoListFilter}
-            filter={t.filter}
-            delTask={delTask}
-            changeTypeFilters={changeTypeFilters}
-            addTask={addTask}
-            doneToggle={doneToggle}
-            delToDoList={delToDoList}
-            changeTaskTitle={changeTaskTitle}
-            changeTodoListTitle={changeTodoListTitle}
-          />
-        );
-      })}
+      <AppBar position={"static"}>
+        <Toolbar>
+          <IconButton edge={"start"} color={"inherit"} aria-label={"menu"}>
+            <Menu />
+          </IconButton>
+          <Typography variant={"h6"}>To-Do List</Typography>
+          <Button color={"inherit"}>Login</Button>
+        </Toolbar>
+      </AppBar>
+      <Container fixed>
+        <Grid>
+          <h3>Create new To-Do</h3>
+        </Grid>
+        <Grid container style={{ padding: "5px 1px 10px" }}>
+          <CommonInput actionInput={addToDoList} />
+        </Grid>
+        <Grid container spacing={4}>
+          {toDoMap}
+        </Grid>
+      </Container>
     </div>
   );
 }
